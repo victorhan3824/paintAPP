@@ -37,14 +37,18 @@ void draw() { //==========================================
   //color buttons ========================================  
   colorSelectors();
   selectBlack();
-  //color indicator =====================================
+  //color indicator ======================================
   stroke(darkBrown);
   fill(penColor);
   rect(100, 20, 10, 160);
-  //slider that adjust the stroke weight
+  //slider that adjust the stroke weight =================
   strokeAdjust(sliderY);
-  //stamp tool
+  //stamp tool ===========================================
   stamp(stampFill);
+  //planned switch page button
+  fill(white);
+  stroke(darkBrown);
+  rect(20,345,70,25);
 }
 
 void mouseDragged() { //=================================
@@ -63,17 +67,7 @@ void mouseDragged() { //=================================
 
 void mouseReleased() {
   // detect the selected color =================================================================
-  if (mouseX > 5 && mouseX < 35 && mouseY > 10 && mouseY < 40) penColor = red;
-  if (mouseX > 45 && mouseX < 75 && mouseY > 10 && mouseY < 40) penColor = pink; // 1st row
-  if (mouseX > 5 && mouseX < 35 && mouseY > 50 && mouseY < 80) penColor = purple;
-  if (mouseX > 45 && mouseX < 75 && mouseY > 50 && mouseY < 80) penColor = brown; // 2nd row
-  if (mouseX > 5 && mouseX < 35 && mouseY > 90 && mouseY < 120) penColor = blue;
-  if (mouseX > 45 && mouseX < 75 && mouseY > 90 && mouseY < 120) penColor = lightBlue; // 3rd row
-  if (mouseX > 5 && mouseX < 35 && mouseY > 130 && mouseY < 150) penColor = lightGreen;
-  if (mouseX > 45 && mouseX < 75 && mouseY > 130 && mouseY < 150) penColor = medGreen; // 4th row
-  if (mouseX > 5 && mouseX < 35 && mouseY > 170 && mouseY < 200) penColor = yellow;
-  if (mouseX > 45 && mouseX < 75 && mouseY > 170 && mouseY < 200) penColor = orange; //5th row
-  if (dist(mouseX, mouseY, 80, 250) < 15) penColor = black; //selecting black
+  colorButtonCheck();
   // end of color detection ====================================================================
   sliderControl(); // slider control
   //stamp control ==============================================================================
@@ -118,6 +112,20 @@ void colorButton(int x, int y, color Color) {
     stroke(darkBrown);
   }
   square(x, y, 30);
+}
+
+void colorButtonCheck() {
+  if (mouseX > 5 && mouseX < 35 && mouseY > 10 && mouseY < 40) penColor = red;
+  if (mouseX > 45 && mouseX < 75 && mouseY > 10 && mouseY < 40) penColor = pink; // 1st row
+  if (mouseX > 5 && mouseX < 35 && mouseY > 50 && mouseY < 80) penColor = purple;
+  if (mouseX > 45 && mouseX < 75 && mouseY > 50 && mouseY < 80) penColor = brown; // 2nd row
+  if (mouseX > 5 && mouseX < 35 && mouseY > 90 && mouseY < 120) penColor = blue;
+  if (mouseX > 45 && mouseX < 75 && mouseY > 90 && mouseY < 120) penColor = lightBlue; // 3rd row
+  if (mouseX > 5 && mouseX < 35 && mouseY > 130 && mouseY < 150) penColor = lightGreen;
+  if (mouseX > 45 && mouseX < 75 && mouseY > 130 && mouseY < 150) penColor = medGreen; // 4th row
+  if (mouseX > 5 && mouseX < 35 && mouseY > 170 && mouseY < 200) penColor = yellow;
+  if (mouseX > 45 && mouseX < 75 && mouseY > 170 && mouseY < 200) penColor = orange; //5th row
+  if (dist(mouseX, mouseY, 80, 250) < 15) penColor = black; //selecting black  
 }
 
 void selectBlack () {

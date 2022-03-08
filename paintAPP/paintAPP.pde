@@ -29,7 +29,7 @@ void setup() { //========================================
   penWeight = 0;
   apple = loadImage("apple.png");
   appleOn = 1;
-  stampFill = white;
+  stampFill = color(200);
 }
 
 void draw() { //==========================================
@@ -54,7 +54,7 @@ void mouseDragged() { //=================================
       strokeWeight(penWeight);
       line(pmouseX, pmouseY, mouseX, mouseY);
     } else {
-      image(apple, mouseX, mouseY, 80, 80);
+      image(apple, mouseX-40, mouseY-40, 80, 80);
     }
   } //end of drawing mode ===============================
   
@@ -79,7 +79,7 @@ void mouseReleased() {
   //stamp control ==============================================================================
   if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) {
     appleOn = appleOn*-1;
-    if (appleOn > 0) stampFill = white;
+    if (appleOn > 0) stampFill = color(200);
     else stampFill = yellow;
   }
 }

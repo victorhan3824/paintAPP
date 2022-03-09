@@ -45,10 +45,14 @@ void draw() { //==========================================
   strokeAdjust(sliderY);
   //stamp tool ===========================================
   stamp(stampFill);
-  //planned switch page button
+  //UI planner
   fill(white);
   stroke(darkBrown);
   rect(20,345,70,25);
+  
+  rect(20,470,70,25); //new
+  rect(20,505,70,25); //load
+  rect(20,540,70,25); //save
 }
 
 void mouseDragged() { //=================================
@@ -58,7 +62,7 @@ void mouseDragged() { //=================================
       strokeWeight(penWeight);
       line(pmouseX, pmouseY, mouseX, mouseY);
     } else {
-      image(apple, mouseX-40, mouseY-40, 80, 80);
+      image(apple, mouseX-(80+5*penWeight)/2, mouseY-(80+5*penWeight)/2, 80+5*penWeight, 80+5*penWeight);
     }
   } //end of drawing mode ===============================
   

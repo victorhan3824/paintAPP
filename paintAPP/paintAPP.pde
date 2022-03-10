@@ -1,9 +1,13 @@
 //sketch-pad rough
 
+//for tommorrow:
+//1. paint bucket
+//2. 
+
 //variables
 PImage apple;
 float sliderY, penWeight;
-color penColor, stampFill;
+color penColor, stampStatus;
 int appleOn, pageNum;
 
 //color pallette
@@ -30,7 +34,7 @@ void setup() { //========================================
   penWeight = 0;
   apple = loadImage("apple.png");
   appleOn = 1;
-  stampFill = color(200);
+  stampStatus = color(200);
   pageNum = 1;
 }
 
@@ -45,17 +49,26 @@ void draw() { //==========================================
   rect(100, 20, 8, 160);
   //slider that adjust the stroke weight =================
   strokeAdjust(sliderY);
-  
+
   //page Switcher ========================================
   pageSwitcher();
-  //stamp tool ===========================================
-  stamp(stampFill);
-  
+  //stamp indicator ======================================
+  stroke(darkBrown);
+  fill(stampStatus);
+  rect(100, 380, 8, 80);
+
   if (pageNum == 1) { //page number 1
+    //stamp tool ===========================================
+    stamp();
     // 3 buttons clear, save, load
     clearButton();
     saveButton();
     loadButton();
+  }
+  if (pageNum == -1) { //pageNumber 2
+    eraser();
+    paintBrush();
+    thing();
   }
 }
 
@@ -84,7 +97,7 @@ void mouseReleased() {
   println(pageNum);
   //stamp control ==============================================================================
   if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) appleOn = appleOn*-1;
-  
+
   if (pageNum == 1) { //Page number 1
     //clear everything ===========================================================================
     if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) {
@@ -97,6 +110,10 @@ void mouseReleased() {
     //load images ================================================================================
     if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) selectInput("Pick a file to load", "getImage");
   } //end ========================================================================================
+  if (pageNum == -1) {
+    //eraser =====================================================================================
+    if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) penColor = white;
+  }
 }
 
 //CUSTOM FUNCTIONS begins here =================================================================
@@ -207,31 +224,31 @@ void sliderControl() {
   penWeight = map(sliderY, 220, 320, 1, 20);
 }
 
-void stamp(color mode) {
+void stamp() {
   if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) stroke(white); //tactile
   else stroke(darkBrown);
 
-  fill(mode);
+  fill(200);
   rect(15, 380, 80, 80);
   image(apple, 15, 380, 80, 80);
 
-  if (appleOn > 0) stampFill = color(200);
-  else stampFill = yellow;
+  if (appleOn > 0) stampStatus = color(200);
+  else stampStatus = yellow;
 }
 
 void pageSwitcher() {
   fill(0);
-  if (mouseX > 30 && mouseX < 90 && mouseY > 345 && mouseY < 370) stroke(white);
+  if (mouseX > 20 && mouseX < 90 && mouseY > 345 && mouseY < 370) stroke(white);
   else stroke(darkBrown);
   rect(20, 345, 70, 25);
   fill(255);
   if (pageNum == 1) text("PAGE 1", 55, 358);
-  else text("PAGE 2", 55, 358);
+  if (pageNum == -1) text("PAGE 2", 55, 358);
 }
 
 void clearButton() {
   fill(0);
-  if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) stroke(white);
+  if (mouseX > 20 && mouseX < 90 && mouseY > 470 && mouseY < 495) stroke(white);
   else stroke(darkBrown);
   rect(20, 470, 70, 25);
   fill(255);
@@ -240,7 +257,7 @@ void clearButton() {
 
 void saveButton() {
   fill(0);
-  if (mouseX > 30 && mouseX < 90 && mouseY > 505 && mouseY < 530) stroke(white);
+  if (mouseX > 20 && mouseX < 90 && mouseY > 505 && mouseY < 530) stroke(white);
   else stroke(darkBrown);
   rect(20, 505, 70, 25);
   fill(255);
@@ -249,9 +266,34 @@ void saveButton() {
 
 void loadButton() {
   fill(0);
-  if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) stroke(white);
+  if (mouseX > 20 && mouseX < 90 && mouseY > 540 && mouseY < 565) stroke(white);
   else stroke(darkBrown);
   rect(20, 540, 70, 25);
   fill(255);
   text("LOAD", 55, 553);
+}
+
+void eraser() {
+  fill(0);
+  if (mouseX > 20 && mouseX < 90 && mouseY > 540 && mouseY < 565) stroke(white);
+  else stroke(darkBrown);
+  rect(20, 540, 70, 25);
+  fill(255);
+  text("ERASE", 55, 553);
+}
+
+void paintBrush () {
+  if (mouseX > 20 && mouseX < 90 && mouseY > 380 && mouseY < 450) stroke(white); //tactile
+  else stroke(darkBrown);
+
+  fill(200);
+  rect(20, 380, 70, 70);
+}
+
+void thing () {
+  if (mouseX > 20 && mouseX < 90 && mouseY > 380 && mouseY < 450) stroke(white); //tactile
+  else stroke(darkBrown);
+
+  fill(200);
+  rect(20, 460, 70, 70);
 }

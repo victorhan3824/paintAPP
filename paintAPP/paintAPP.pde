@@ -107,7 +107,7 @@ void getImage(File f) {
     int n = 0;
     while (n < 10) {
       PImage pic = loadImage(f.getPath());
-      image(pic, 110, 0);
+      image(pic, 110, 0, 690, 600);
       n = n + 1;
     }
   }
@@ -213,28 +213,28 @@ void stamp(color mode) {
 }
 
 void clearButton() {
-  fill(200);
+  fill(0);
   if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) stroke(white);
   else stroke(darkBrown);
   rect(20, 470, 70, 25);
-  fill(0);
+  fill(255);
   text("CLEAR",55,483);
 }
 
 void saveButton() {
-  fill(200);
+  fill(0);
   if (mouseX > 30 && mouseX < 90 && mouseY > 505 && mouseY < 530) stroke(white);
   else stroke(darkBrown);
   rect(20, 505, 70, 25); 
-  fill(0);
+  fill(255);
   text("SAVE",55,518);
 }
 
 void loadButton() {
-  fill(200);
+  fill(0);
   if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) stroke(white);
   else stroke(darkBrown);
   rect(20, 540, 70, 25); 
-  fill(0);
+  fill(255);
   text("LOAD",55,553);
 }

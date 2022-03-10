@@ -4,7 +4,7 @@
 PImage apple;
 float sliderY, penWeight;
 color penColor, stampFill;
-int appleOn;
+int appleOn, pageNum;
 
 //color pallette
 color white      = #FFFFFF; //background, erase, tactile
@@ -19,23 +19,24 @@ color medGreen   = #006C27;
 color yellow     = #F6FF05;
 color orange     = #FF7E05;
 color darkBrown  = #341F18; // not draw-able
-color black      = #000000; 
+color black      = #000000;
 
 void setup() { //========================================
   size(800, 600);
   background(255);
-  textAlign(CENTER,CENTER);
+  textAlign(CENTER, CENTER);
   penColor = red;
   sliderY = 220;
   penWeight = 0;
   apple = loadImage("apple.png");
   appleOn = 1;
   stampFill = color(200);
+  pageNum = 1;
 }
 
 void draw() { //==========================================
   toolBar();
-  //color buttons ========================================  
+  //color buttons ========================================
   colorSelectors();
   selectBlack();
   //color indicator ======================================
@@ -45,17 +46,17 @@ void draw() { //==========================================
   //slider that adjust the stroke weight =================
   strokeAdjust(sliderY);
   
-  
+  //page Switcher ========================================
+  pageSwitcher();
   //stamp tool ===========================================
   stamp(stampFill);
-  //UI planner
-  fill(white);
-  stroke(darkBrown);
-  rect(20, 345, 70, 25); //switch page function ????
-
-  clearButton();
-  saveButton();
-  loadButton();
+  
+  if (pageNum == 1) { //page number 1
+    // 3 buttons clear, save, load
+    clearButton();
+    saveButton();
+    loadButton();
+  }
 }
 
 void mouseDragged() { //=================================
@@ -77,32 +78,38 @@ void mouseReleased() {
   colorButtonCheck();
   // end of color detection ====================================================================
   sliderControl(); // slider control
-  
+
+  //page switcher
+  if (mouseX > 30 && mouseX < 90 && mouseY > 345 && mouseY < 370) pageNum = pageNum*-1;
+  println(pageNum);
   //stamp control ==============================================================================
   if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) appleOn = appleOn*-1;
-  //clear everything ===========================================================================
-  if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) {
-    noStroke();
-    fill(white);
-    rect(113,0,790,600);
-  }
-  //save images ================================================================================
-  if (mouseX > 30 && mouseX < 90 && mouseY > 505 && mouseY < 530) selectOutput("Choose a name for your image","saveImage");
-  //load images ================================================================================
-  if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) selectInput("Pick a file to load", "getImage");
+  
+  if (pageNum == 1) { //Page number 1
+    //clear everything ===========================================================================
+    if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) {
+      noStroke();
+      fill(white);
+      rect(113, 0, 790, 600);
+    }
+    //save images ================================================================================
+    if (mouseX > 30 && mouseX < 90 && mouseY > 505 && mouseY < 530) selectOutput("Choose a name for your image", "saveImage");
+    //load images ================================================================================
+    if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) selectInput("Pick a file to load", "getImage");
+  } //end ========================================================================================
 }
 
 //CUSTOM FUNCTIONS begins here =================================================================
 
 void saveImage(File f) {
   if (f != null) {
-    PImage canvas = get(110,0, width-110, height); //forms a rectangle, size(width,height, ...)
+    PImage canvas = get(110, 0, width-110, height); //forms a rectangle, size(width,height, ...)
     canvas.save(f.getAbsolutePath());
   }
 }
 
 void getImage(File f) {
-  if (f != null){
+  if (f != null) {
     //KLUDGE
     int n = 0;
     while (n < 10) {
@@ -150,21 +157,21 @@ void colorButtonCheck() {
   checkButton(5, 50, 30, 30, purple);
   checkButton(45, 50, 30, 30, brown);
   checkButton(5, 90, 30, 30, blue);
-  checkButton(45, 90, 30, 30, lightBlue); 
+  checkButton(45, 90, 30, 30, lightBlue);
   checkButton(5, 130, 30, 30, lightGreen);
   checkButton(45, 130, 30, 30, medGreen);
-  checkButton(5, 170, 30, 30, yellow); 
+  checkButton(5, 170, 30, 30, yellow);
   checkButton(45, 170, 30, 30, orange);
   if (dist(mouseX, mouseY, 80, 250) < 15) { //black =============
-    penColor = black; 
+    penColor = black;
     appleOn = 1;
   }
 }
 
 void checkButton(int x, int y, int w, int h, color c) {
   if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
-     penColor = c;
-     appleOn = 1;
+    penColor = c;
+    appleOn = 1;
   }
 }
 
@@ -212,29 +219,39 @@ void stamp(color mode) {
   else stampFill = yellow;
 }
 
+void pageSwitcher() {
+  fill(0);
+  if (mouseX > 30 && mouseX < 90 && mouseY > 345 && mouseY < 370) stroke(white);
+  else stroke(darkBrown);
+  rect(20, 345, 70, 25);
+  fill(255);
+  if (pageNum == 1) text("PAGE 1", 55, 358);
+  else text("PAGE 2", 55, 358);
+}
+
 void clearButton() {
   fill(0);
   if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) stroke(white);
   else stroke(darkBrown);
   rect(20, 470, 70, 25);
   fill(255);
-  text("CLEAR",55,483);
+  text("CLEAR", 55, 483);
 }
 
 void saveButton() {
   fill(0);
   if (mouseX > 30 && mouseX < 90 && mouseY > 505 && mouseY < 530) stroke(white);
   else stroke(darkBrown);
-  rect(20, 505, 70, 25); 
+  rect(20, 505, 70, 25);
   fill(255);
-  text("SAVE",55,518);
+  text("SAVE", 55, 518);
 }
 
 void loadButton() {
   fill(0);
   if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) stroke(white);
   else stroke(darkBrown);
-  rect(20, 540, 70, 25); 
+  rect(20, 540, 70, 25);
   fill(255);
-  text("LOAD",55,553);
+  text("LOAD", 55, 553);
 }

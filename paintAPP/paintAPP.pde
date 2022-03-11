@@ -2,10 +2,10 @@
 
 //for tommorrow:
 //1. paint bucket
-//2. 
+//2.
 
 //variables
-PImage apple;
+PImage apple, paintBucket;
 float sliderY, penWeight;
 color penColor, stampStatus;
 int appleOn, pageNum;
@@ -33,6 +33,7 @@ void setup() { //========================================
   sliderY = 220;
   penWeight = 0;
   apple = loadImage("apple.png");
+  paintBucket = loadImage("paint.png");
   appleOn = 1;
   stampStatus = color(200);
   pageNum = 1;
@@ -53,6 +54,8 @@ void draw() { //==========================================
   //page Switcher ========================================
   pageSwitcher();
   //stamp indicator ======================================
+  if (appleOn > 0) stampStatus = color(200); 
+  else stampStatus = yellow;
   stroke(darkBrown);
   fill(stampStatus);
   rect(100, 380, 8, 80);
@@ -94,11 +97,10 @@ void mouseReleased() {
 
   //page switcher
   if (mouseX > 30 && mouseX < 90 && mouseY > 345 && mouseY < 370) pageNum = pageNum*-1;
-  println(pageNum);
-  //stamp control ==============================================================================
-  if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) appleOn = appleOn*-1;
 
   if (pageNum == 1) { //Page number 1
+    //stamp control ==============================================================================
+    if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) appleOn = appleOn*-1;
     //clear everything ===========================================================================
     if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) {
       noStroke();
@@ -111,8 +113,17 @@ void mouseReleased() {
     if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) selectInput("Pick a file to load", "getImage");
   } //end ========================================================================================
   if (pageNum == -1) {
+    //paint bucket
+    if (mouseX > 20 && mouseX < 90 && mouseY > 380 && mouseY < 450) {
+      noStroke();
+      fill(penColor);
+      rect(113, 0, 790, 600);
+    }
     //eraser =====================================================================================
-    if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) penColor = white;
+    if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) {
+      penColor = white;
+      appleOn = 1;
+    }
   }
 }
 
@@ -231,9 +242,6 @@ void stamp() {
   fill(200);
   rect(15, 380, 80, 80);
   image(apple, 15, 380, 80, 80);
-
-  if (appleOn > 0) stampStatus = color(200);
-  else stampStatus = yellow;
 }
 
 void pageSwitcher() {
@@ -285,15 +293,14 @@ void eraser() {
 void paintBrush () {
   if (mouseX > 20 && mouseX < 90 && mouseY > 380 && mouseY < 450) stroke(white); //tactile
   else stroke(darkBrown);
-
   fill(200);
   rect(20, 380, 70, 70);
+  image(paintBucket, 20, 380, 70, 70);
 }
 
 void thing () {
-  if (mouseX > 20 && mouseX < 90 && mouseY > 380 && mouseY < 450) stroke(white); //tactile
+  if (mouseX > 20 && mouseX < 90 && mouseY > 460 && mouseY < 530) stroke(white); //tactile
   else stroke(darkBrown);
-
   fill(200);
   rect(20, 460, 70, 70);
 }

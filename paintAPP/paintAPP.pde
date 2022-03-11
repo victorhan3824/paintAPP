@@ -1,14 +1,10 @@
-//sketch-pad rough
-
-//for tommorrow:
-//1. paint bucket
-//2.
+//SKETCH PAD ==========================================
 
 //variables
-PImage apple, paintBucket;
+PImage apple, paintBucket, pen;
 float sliderY, penWeight;
-color penColor, stampStatus;
-int appleOn, pageNum;
+color penColor, stampStatus, eraseColor;
+int appleOn, pageNum, penOn;
 
 //color pallette
 color white      = #FFFFFF; //background, erase, tactile
@@ -34,9 +30,12 @@ void setup() { //========================================
   penWeight = 0;
   apple = loadImage("apple.png");
   paintBucket = loadImage("paint.png");
+  pen = loadImage("pen.png");
   appleOn = 1;
   stampStatus = color(200);
   pageNum = 1;
+  penOn = -1;
+  eraseColor = white;
 }
 
 void draw() { //==========================================
@@ -58,10 +57,15 @@ void draw() { //==========================================
   else stampStatus = yellow;
   stroke(darkBrown);
   fill(stampStatus);
-  rect(100, 380, 8, 80);
+  rect(100, 380, 8, 70);
+  //penOn indicator
+  if (penOn < 0) fill(yellow);
+  if (penOn > 0) fill(200);
+  stroke(darkBrown);
+  rect(100, 460, 8, 70);
 
   if (pageNum == 1) { //page number 1
-    //stamp tool ===========================================
+    //stamp tool =========================================
     stamp();
     // 3 buttons clear, save, load
     clearButton();
@@ -71,21 +75,27 @@ void draw() { //==========================================
   if (pageNum == -1) { //pageNumber 2
     eraser();
     paintBrush();
-    thing();
+    penIndicator();
   }
+  
+  //line that indicates the selected color
+  stroke(penColor);
+  strokeWeight(3);
+  line(111,0,111,600);
 }
 
 void mouseDragged() { //=================================
-  if (mouseX > 110 || mouseY > 600) { // drawings
-    if (appleOn > 0) {
-      stroke(penColor);
-      strokeWeight(penWeight);
-      line(pmouseX, pmouseY, mouseX, mouseY);
-    } else {
-      image(apple, mouseX-(80+5*penWeight)/2, mouseY-(80+5*penWeight)/2, 80+5*penWeight, 80+5*penWeight);
-    }
-  } //end of drawing mode ===============================
-
+  if (penOn == -1) {
+    if (mouseX > 110 || mouseY > 600) { // drawings
+      if (appleOn > 0) {
+        stroke(penColor);
+        strokeWeight(penWeight);
+        line(pmouseX, pmouseY, mouseX, mouseY);
+      } else {
+        image(apple, mouseX-(80+5*penWeight)/2, mouseY-(80+5*penWeight)/2, 80+5*penWeight, 80+5*penWeight);
+      }
+    } //end of drawing mode =============================
+  }
   sliderControl(); //slider control
 }
 
@@ -99,9 +109,9 @@ void mouseReleased() {
   if (mouseX > 30 && mouseX < 90 && mouseY > 345 && mouseY < 370) pageNum = pageNum*-1;
 
   if (pageNum == 1) { //Page number 1
-    //stamp control ==============================================================================
+    //stamp control =============================================================================
     if (mouseX > 15 && mouseX < 95 && mouseY > 380 && mouseY < 460) appleOn = appleOn*-1;
-    //clear everything ===========================================================================
+    //clear everything ==========================================================================
     if (mouseX > 30 && mouseX < 90 && mouseY > 470 && mouseY < 495) {
       noStroke();
       fill(white);
@@ -113,21 +123,24 @@ void mouseReleased() {
     if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) selectInput("Pick a file to load", "getImage");
   } //end ========================================================================================
   if (pageNum == -1) {
+    //pen status
+    if (mouseX > 20 && mouseX < 90 && mouseY > 460 && mouseY < 530) penOn = penOn*-1;
     //paint bucket
     if (mouseX > 20 && mouseX < 90 && mouseY > 380 && mouseY < 450) {
       noStroke();
       fill(penColor);
+      eraseColor = penColor;
       rect(113, 0, 790, 600);
     }
     //eraser =====================================================================================
     if (mouseX > 30 && mouseX < 90 && mouseY > 540 && mouseY < 565) {
-      penColor = white;
+      penColor = eraseColor;
       appleOn = 1;
     }
   }
 }
 
-//CUSTOM FUNCTIONS begins here =================================================================
+//CUSTOM FUNCTIONS begins here ===================================================================
 
 void saveImage(File f) {
   if (f != null) {
@@ -298,9 +311,10 @@ void paintBrush () {
   image(paintBucket, 20, 380, 70, 70);
 }
 
-void thing () {
+void penIndicator () {
   if (mouseX > 20 && mouseX < 90 && mouseY > 460 && mouseY < 530) stroke(white); //tactile
   else stroke(darkBrown);
   fill(200);
   rect(20, 460, 70, 70);
+  image(pen,20,460,70,70);
 }
